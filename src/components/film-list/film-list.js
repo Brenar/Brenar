@@ -4,7 +4,8 @@ import FilmListItem from '../film-list-item';
 
 import './film-list.css';
 
-const FilmList = () => {
+const FilmList = ({tableData}) => {
+
     return (
         <div className="wrapper">
             <table className="table">
@@ -12,13 +13,14 @@ const FilmList = () => {
                     <th>id</th>
                     <th>name</th>
                     <th>description</th>
-                    <th>info 1</th>
-                    <th>info 2</th>
+                    <th>genre</th>
+                    <th>rating</th>
                     <th>check</th>
                 </tr>
-                <FilmListItem/>
-                <FilmListItem/>
-                <FilmListItem/>
+
+                {tableData && tableData.length ? tableData.map( film =>
+                      <FilmListItem key={film.id} filmData={film}/>) : ''
+                }
                 </table>
         </div>
     )
