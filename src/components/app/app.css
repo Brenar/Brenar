@@ -1,0 +1,10 @@
+.app {
+    margin: 0 auto;
+    max-width: 900px;
+    background-color: rgb(225, 235, 238);
+    border-radius: 15px;
+}
+.app button {
+  font-size: 16px;
+  font-weight: 700;
+}

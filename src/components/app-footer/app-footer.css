@@ -1,0 +1,40 @@
+.footer {
+    display: flex;
+    justify-content: start;
+    padding: 10px;
+    margin: 10px;
+}
+
+.footer button {
+    padding: 8px;
+    margin-right: 40px;
+    width: 150px;
+}
+
+.footer .update, .delete, .search {
+    display: inline-block;
+    margin-top: 15px;
+    height: 33px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid rgb(89, 158, 132);
+    box-shadow: 0.2em 0.2em 4px rgba(52, 84, 94, 0.5);
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.footer .update, .footer .search {
+    background-color: rgb(221, 247, 160);
+}
+
+.footer .delete {
+    background-color: rgb(247, 89, 89);
+}
+.footer .delete:hover {
+    background-color: rgb(187, 75, 75);
+}
+
+.footer .update:hover, .delete:hover, .search:hover {
+    background-color: rgb(203, 209, 123);
+}
+
