@@ -20,13 +20,43 @@ const App = () => {
     setTable([...table, {id: table.length + 1, ...newFilm}])
   }
 
+  const handleAscending = fieldName => {
+    setTable(prevTable => {
+      return prevTable.sort((a, b) => {
+        if(a[fieldName] < b[fieldName]){
+          return -1
+        } else if(a[fieldName] > b[fieldName]){
+          return 1
+        } else {
+          return 0
+        }
+      })
+    })
+  }
+
+  const handleDescending = fieldName => {
+    setTable(prevTable => {
+      return prevTable.sort((a, b) => {
+        if(a[fieldName] < b[fieldName]){
+          return 1
+        } else if(a[fieldName] > b[fieldName]){
+          return -1
+        } else {
+          return 0
+        }
+      })
+    })
+  }
+
+  const sortHandlers = {handleAscending, handleDescending}
+
     return (
         <div className="app">
             <AppHeader/>
             <div className="add-form">
-                <AddForm handleAddData={addFilm}/>
+                <AddForm handleAddData={addFilm} />
             </div>
-            <FilmList tableData={table} />
+            <FilmList tableData={table} {...sortHandlers}/>
             <AppFooter/>
         </div>
     )
