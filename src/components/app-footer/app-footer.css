@@ -11,6 +11,7 @@
     width: 150px;
 }
 
+
 .footer .update, .delete, .search {
     display: inline-block;
     margin-top: 15px;
@@ -21,6 +22,13 @@
     box-shadow: 0.2em 0.2em 4px rgba(52, 84, 94, 0.5);
     transition: 0.2s;
     cursor: pointer;
+}
+.footer input {
+    padding: 8px;
+    margin-right: 40px;
+    width: 150px;
+    height: 16px;
+    cursor: auto;
 }
 
 .footer .update, .footer .search {
