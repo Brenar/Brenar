@@ -4,7 +4,7 @@ import FilmListItem from '../film-list-item';
 
 import './film-list.css';
 
-const FilmList = ({tableData, handleAscending, handleDescending}) => {
+const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
     const [currentSortField, setCurrentSortField] = useState(null)
     const [currentSortDirection, setCurrentSortDirection] = useState(false)
 
@@ -38,7 +38,7 @@ const FilmList = ({tableData, handleAscending, handleDescending}) => {
                 </thead>
                 <tbody>
                     {tableData && tableData.length ? tableData.map( film =>
-                          <FilmListItem key={film.id} filmData={film}/>) : ''
+                          <FilmListItem key={film.id} filmData={film} {...rest}/>) : ''
                     }
                 </tbody>
                 </table>

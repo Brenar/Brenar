@@ -2,7 +2,7 @@ import React from 'react';
 
 import './app-footer.css';
 
-const AppFooter = ({changeTemp}) => {
+const AppFooter = ({changeTemp, onRemoveLines}) => {
 
     return (
         <div className="footer">
@@ -12,7 +12,7 @@ const AppFooter = ({changeTemp}) => {
                 onChange={(e) => changeTemp(e.target.value)}
                 >
             </input>
-            <button className="delete">Удалить</button>
+            <button className="delete" onClick={onRemoveLines}>Удалить</button>
         </div>
     )
 };

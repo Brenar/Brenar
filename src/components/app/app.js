@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 
 import AppHeader from '../app-header';
 import AddForm from '../app-add-form';
@@ -15,6 +15,8 @@ const defaultFilmList = [
 
 const App = () => {
   const [table, setTable] = useState(defaultFilmList)
+  const [checkedLines, setCheckedLines] = useState([])
+  const [temp, setTemp] = useState('')
 
   const addFilm = newFilm => {
     setTable([...table, {id: table.length + 1, ...newFilm}])
@@ -48,9 +50,20 @@ const App = () => {
     })
   }
 
-  const sortHandlers = {handleAscending, handleDescending}
+  const handleCheckLine = lineId => {
+    setCheckedLines(prevCheckedLines => {
+      const currentIndex = prevCheckedLines.indexOf(lineId)
+      if(currentIndex !== -1){
+        return [...prevCheckedLines].filter(f => f !== lineId)
+      } else {
+        return [...prevCheckedLines, lineId]
+      }
+    })
+  }
 
-  const [temp, setTemp] = useState('')
+  const handlers = {handleAscending, handleDescending, handleCheckLine}
+
+
 
   const changeTemp = (newTemp => {
     setTemp(newTemp)
@@ -71,14 +84,19 @@ const App = () => {
 
   const visibleFilms = searchFilms(table, temp)
 
+  const handleDeleteLines = useCallback(() => {
+    setTable([...table].filter(f => !checkedLines.includes(f.id)))
+    setCheckedLines([])
+  }, [checkedLines, setTable, setCheckedLines, table])
+
     return (
         <div className="app">
             <AppHeader/>
             <div className="add-form">
                 <AddForm handleAddData={addFilm} />
             </div>
-            <FilmList tableData={visibleFilms} {...sortHandlers}/>
-            <AppFooter changeTemp={changeTemp}/>
+            <FilmList tableData={visibleFilms} {...handlers} />
+            <AppFooter changeTemp={changeTemp} onRemoveLines={handleDeleteLines}/>
         </div>
     )
 }
