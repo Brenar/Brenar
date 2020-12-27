@@ -1,20 +1,38 @@
-import React, {useState} from 'react';
-
+import React from 'react';
 import './film-list-item.css';
 
-const FilmListItem = ({filmData, handleCheckLine}) => {
+const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTableData}) => {
 
-    //const [name, setName] = useState('')
+    const handleChangeData = (value, lineId, fieldName) => {
+        setChangeTempTableData(prevData => {
+            console.log(prevData)
+            prevData.map((line, key) => {
+                if(line.id === lineId) {
+                    prevData[key][fieldName] = value
+                }
+            })
 
-  const {id, name, description, genre, rating} = filmData
+            return prevData
+        })
+    }
+
     return (
         <tr>
-            <td>{id}</td>
-            <td><textarea className="area">{name}</textarea></td>
-            <td><textarea>{description}</textarea></td>
-            <td><textarea>{genre}</textarea></td>
-            <td><textarea className="rating-area">{rating}</textarea></td>
-            <td><input type="checkbox" onClick={() => handleCheckLine(id)}/></td>
+          {Object.keys(filmData).map((item, key) => {
+            if(item === 'isChecked'){
+              return <td key={key}><input type="checkbox" onClick={() => handleCheckLine(filmData.id)}/></td>
+            } else {
+              if(checkedLines.includes(filmData.id) && item !== 'id'){
+                return <td key={key}>
+                    <textarea onChange={event => handleChangeData(event.target.value, filmData.id, item)}>
+                        {filmData[item]}
+                    </textarea>
+                </td>
+              } else {
+                return <td key={key}>{filmData[item]}</td>
+              }
+            }
+          })}
         </tr>
     )
 }

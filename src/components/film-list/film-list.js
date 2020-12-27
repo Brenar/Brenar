@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
-
 import FilmListItem from '../film-list-item';
-
 import './film-list.css';
 
 const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {

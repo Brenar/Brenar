@@ -2,11 +2,11 @@ import React from 'react';
 
 import './app-footer.css';
 
-const AppFooter = ({changeTemp, onRemoveLines}) => {
+const AppFooter = ({changeTemp, onRemoveLines, onChangeLine}) => {
 
     return (
         <div className="footer">
-            <button className="update">Редактировать</button>
+            <button className="update" onClick={onChangeLine}>Редактировать</button>
             <input 
                 className="search"
                 onChange={(e) => changeTemp(e.target.value)}
