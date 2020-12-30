@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './app-footer.css';
+import './app-footer.scss';
 
 const AppFooter = ({changeTemp, onRemoveLines, onChangeLine}) => {
 

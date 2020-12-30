@@ -5,7 +5,7 @@ import AddForm from '../app-add-form'
 import FilmList from '../film-list'
 import AppFooter from '../app-footer'
 
-import './app.css'
+import './app.scss'
 
 const defaultFilmList = [
   {id: 1, name: "Terminator", description: "I'll be back", genre: "action", rating: "10", isChecked: false},
@@ -27,7 +27,7 @@ const App = () => {
   const [changeTempTableData, setChangeTempTableData] = useState([])
 
   const addFilm = newFilm => {
-    setTable([...table, {id: table.length + 1, ...newFilm}])
+    setTable([...table, {id: table.length + 1, ...newFilm, isChecked: false}])
   }
 
   const handleAscending = fieldName => {

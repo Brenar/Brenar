@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import FilmListItem from '../film-list-item';
-import './film-list.css';
+import './film-list.scss';
 
 const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
     const [currentSortField, setCurrentSortField] = useState(null)
@@ -26,7 +26,7 @@ const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
             <table className="table">
                 <thead>
                     <tr>
-                        <th onClick={handleSortTable('id')}>id</th>
+                        <th className="id" onClick={handleSortTable('id')}>id</th>
                         <th onClick={handleSortTable('name')}>name</th>
                         <th onClick={handleSortTable('description')}> description</th>
                         <th onClick={handleSortTable('genre')}>genre</th>

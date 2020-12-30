@@ -1,0 +1,29 @@
+.addForm {
+	display: flex;
+	justify-content: start;
+	padding: 10px 0 10px 0;
+	input {
+		padding: 8px;
+		margin: 15px;
+		width: 120px;
+		height: 15px;
+		border-radius: 5px;
+		border: 2px solid rgb(89, 135, 158);
+		box-shadow: 0.2em 0.2em 4px rgba(52, 84, 94, 0.5);
+	}
+	.add-btn {
+		display: inline-block;
+		margin-top: 15px;
+		height: 33px;
+		width: 200px;
+		border-radius: 5px;
+		border: 1px solid rgb(89, 135, 158);
+		box-shadow: 0.2em 0.2em 4px rgba(52, 84, 94, 0.5);
+		background-color: rgb(189, 238, 171);
+		transition: 0.2s;
+		cursor: pointer;
+	}
+	button:hover {
+		background-color: rgb(141, 197, 121);
+	}
+}

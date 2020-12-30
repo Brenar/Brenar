@@ -1,5 +1,5 @@
 import React from 'react';
-import './film-list-item.css';
+import './film-list-item.scss';
 
 const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTableData}) => {
 
@@ -20,7 +20,7 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTab
         <tr>
           {Object.keys(filmData).map((item, key) => {
             if(item === 'isChecked'){
-              return <td key={key}><input type="checkbox" onClick={() => handleCheckLine(filmData.id)}/></td>
+              return <td key={key}><input type="checkbox" value={false} onClick={() => handleCheckLine(filmData.id)}/></td>
             } else {
               if(checkedLines.includes(filmData.id) && item !== 'id'){
                 return <td key={key}>

@@ -1,0 +1,45 @@
+
+tr:first-child{
+width: 15px;
+}
+tr{
+	td{
+	outline: none;
+	resize: none;
+	width: 180px;
+	height: 48px;
+	font-family: Verdana;
+	background: none;
+	border: none;
+	font-size: 16px;
+	text-align: center;
+	line-height: 18px;
+	margin: auto;
+	padding: 13px 0 0px 0px;
+		textarea {
+		outline: none;
+		resize: none;
+		height: 42px;
+		width: 180px;
+		max-height: 36px;
+		font-family: Verdana;
+		background: none;
+		border: none;
+		font-size: 16px;
+		text-align: center;
+		line-height: 16px;
+		//margin: auto;
+		padding: 14px 0px 0px 0px;
+		}
+		&:first {
+			width: 10px;
+		}
+	}	
+}
+
+
+
+
+// .rating-area {
+// 	width: 30px;
+// }

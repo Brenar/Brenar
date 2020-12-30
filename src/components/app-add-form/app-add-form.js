@@ -1,6 +1,6 @@
 import React, {useState, useCallback} from 'react';
 
-import './app-add-form.css'
+import './app-add-form.scss'
 
 const AddForm = ({handleAddData}) => {
 

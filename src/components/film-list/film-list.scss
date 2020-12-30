@@ -1,0 +1,21 @@
+.wrapper {
+	width: 95%;
+	margin: 0 auto;
+}
+.table {
+	//width: 100%;
+	text-align: left;
+	//margin: 20px 0 40px 0;
+	border-collapse: collapse;
+	th, td {
+		//width: 170px;
+		padding: 5px;
+		border: 1px solid;
+	}
+	th, td:last-child {
+		width: 15px;
+	}
+	th, td:first-child {
+		width: 15px;
+	}
+}
