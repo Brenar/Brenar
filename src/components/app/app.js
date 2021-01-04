@@ -7,6 +7,8 @@ import AppFooter from '../app-footer'
 
 import './app.scss'
 
+import {addCookie, getCookie} from '../../utils'
+
 const defaultFilmList = [
   {id: 1, name: "Terminator", description: "I'll be back", genre: "action", rating: "10", isChecked: false},
   {
@@ -20,18 +22,34 @@ const defaultFilmList = [
   {id: 3, name: "American pie", description: "Don't eat the pie", genre: "comedy", rating: "10", isChecked: false},
 ]
 
+const getInitTable = () => {
+  try {
+    if(getCookie("table") !== 'undefined' && JSON.parse(getCookie("table"))){
+      return JSON.parse(getCookie("table"))
+    }
+  } catch (e) {
+    console.log("table has an error", JSON.stringify(e))
+  } finally {
+    return defaultFilmList
+  }
+}
+
 const App = () => {
-  const [table, setTable] = useState(defaultFilmList)
+  const [table, setTable] = useState(getInitTable())
   const [checkedLines, setCheckedLines] = useState([])
   const [temp, setTemp] = useState('')
   const [changeTempTableData, setChangeTempTableData] = useState([])
 
+  const setTableWithCookie = (body) => {
+    setTable(addCookie('table', body))
+  }
+
   const addFilm = newFilm => {
-    setTable([...table, {id: table.length + 1, ...newFilm, isChecked: false}])
+    setTableWithCookie([...table, {id: table.length + 1, ...newFilm, isChecked: false}])
   }
 
   const handleAscending = fieldName => {
-    setTable(prevTable => {
+    setTableWithCookie(prevTable => {
       return prevTable.sort((a, b) => {
         if (a[fieldName] <= b[fieldName]) {
           return -1
@@ -45,7 +63,7 @@ const App = () => {
   }
 
   const handleDescending = fieldName => {
-    setTable(prevTable => {
+    setTableWithCookie(prevTable => {
       return prevTable.sort((a, b) => {
         if (a[fieldName] < b[fieldName]) {
           return 1
@@ -73,7 +91,7 @@ const App = () => {
 
   const handleChangeLine = () => {
     const lines = changeTempTableData
-    setTable(prevTable => {
+    setTableWithCookie(prevTable => {
       prevTable.map((item, key) => {
         lines.map((line) => {
           if (prevTable[key].id === line.id) {
@@ -112,9 +130,9 @@ const App = () => {
   const visibleFilms = searchFilms(table, temp)
 
   const handleDeleteLines = useCallback(() => {
-    setTable([...table].filter(f => !checkedLines.includes(f.id)))
+    setTableWithCookie([...table].filter(f => !checkedLines.includes(f.id)))
     setCheckedLines([])
-  }, [checkedLines, setTable, setCheckedLines, table])
+  }, [checkedLines, setTableWithCookie, setCheckedLines, table])
 
   return (
     <div className="app">

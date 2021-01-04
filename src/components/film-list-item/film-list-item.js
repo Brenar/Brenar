@@ -5,7 +5,6 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTab
 
     const handleChangeData = (value, lineId, fieldName) => {
         setChangeTempTableData(prevData => {
-            console.log(prevData)
             prevData.map((line, key) => {
                 if(line.id === lineId) {
                     prevData[key][fieldName] = value
