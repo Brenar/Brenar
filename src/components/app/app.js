@@ -24,14 +24,14 @@ const defaultFilmList = [
 
 const getInitTable = () => {
   try {
-    if(getCookie("table") !== 'undefined' && JSON.parse(getCookie("table"))){
-      return JSON.parse(getCookie("table"))
+    const cookieParseData = JSON.parse(getCookie("table"))
+    if(getCookie("table") !== 'undefined' && cookieParseData){
+      return cookieParseData
     }
   } catch (e) {
     console.log("table has an error", JSON.stringify(e))
-  } finally {
-    return defaultFilmList
   }
+    return defaultFilmList
 }
 
 const App = () => {
@@ -40,17 +40,14 @@ const App = () => {
   const [temp, setTemp] = useState('')
   const [changeTempTableData, setChangeTempTableData] = useState([])
 
-  const setTableWithCookie = (body) => {
-    setTable(addCookie('table', body))
-  }
 
   const addFilm = newFilm => {
-    setTableWithCookie([...table, {id: table.length + 1, ...newFilm, isChecked: false}])
+    setTable(addCookie("table",[...table, {id: table.length + 1, ...newFilm, isChecked: false}]))
   }
 
   const handleAscending = fieldName => {
-    setTableWithCookie(prevTable => {
-      return prevTable.sort((a, b) => {
+    setTable(prevTable => {
+      return addCookie("table", prevTable.sort((a, b) => {
         if (a[fieldName] <= b[fieldName]) {
           return -1
         } else if (a[fieldName] > b[fieldName]) {
@@ -58,13 +55,13 @@ const App = () => {
         } else {
           return 0
         }
-      })
+      }))
     })
   }
 
   const handleDescending = fieldName => {
-    setTableWithCookie(prevTable => {
-      return prevTable.sort((a, b) => {
+    setTable(prevTable => {
+      return addCookie("table", prevTable.sort((a, b) => {
         if (a[fieldName] < b[fieldName]) {
           return 1
         } else if (a[fieldName] > b[fieldName]) {
@@ -72,7 +69,7 @@ const App = () => {
         } else {
           return 0
         }
-      })
+      }))
     })
   }
 
@@ -91,7 +88,7 @@ const App = () => {
 
   const handleChangeLine = () => {
     const lines = changeTempTableData
-    setTableWithCookie(prevTable => {
+    setTable(prevTable => {
       prevTable.map((item, key) => {
         lines.map((line) => {
           if (prevTable[key].id === line.id) {
@@ -103,8 +100,9 @@ const App = () => {
           }
         })
       })
-      return prevTable
-    })
+      return addCookie("table", prevTable)
+    }
+    )
     setCheckedLines([])
   }
 
@@ -130,9 +128,9 @@ const App = () => {
   const visibleFilms = searchFilms(table, temp)
 
   const handleDeleteLines = useCallback(() => {
-    setTableWithCookie([...table].filter(f => !checkedLines.includes(f.id)))
+    setTable(addCookie("table", [...table].filter(f => !checkedLines.includes(f.id))))
     setCheckedLines([])
-  }, [checkedLines, setTableWithCookie, setCheckedLines, table])
+  }, [checkedLines, setTable, setCheckedLines, table])
 
   return (
     <div className="app">
