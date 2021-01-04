@@ -7,7 +7,7 @@ import AppFooter from '../app-footer'
 
 import './app.scss'
 
-import {addCookie, getCookie} from '../../utils'
+import {setItemToLocalStorage, getItemToLocalStorage} from '../../utils'
 
 const defaultFilmList = [
   {id: 1, name: "Terminator", description: "I'll be back", genre: "action", rating: "10", isChecked: false},
@@ -24,8 +24,8 @@ const defaultFilmList = [
 
 const getInitTable = () => {
   try {
-    const cookieParseData = JSON.parse(getCookie("table"))
-    if(getCookie("table") !== 'undefined' && cookieParseData){
+    const cookieParseData = getItemToLocalStorage("table")
+    if(getItemToLocalStorage("table") !== 'undefined' && cookieParseData){
       return cookieParseData
     }
   } catch (e) {
@@ -42,12 +42,12 @@ const App = () => {
 
 
   const addFilm = newFilm => {
-    setTable(addCookie("table",[...table, {id: table.length + 1, ...newFilm, isChecked: false}]))
+    setTable(setItemToLocalStorage("table",[...table, {id: table.length + 1, ...newFilm, isChecked: false}]))
   }
 
   const handleAscending = fieldName => {
     setTable(prevTable => {
-      return addCookie("table", prevTable.sort((a, b) => {
+      return setItemToLocalStorage("table", prevTable.sort((a, b) => {
         if (a[fieldName] <= b[fieldName]) {
           return -1
         } else if (a[fieldName] > b[fieldName]) {
@@ -61,7 +61,7 @@ const App = () => {
 
   const handleDescending = fieldName => {
     setTable(prevTable => {
-      return addCookie("table", prevTable.sort((a, b) => {
+      return setItemToLocalStorage("table", prevTable.sort((a, b) => {
         if (a[fieldName] < b[fieldName]) {
           return 1
         } else if (a[fieldName] > b[fieldName]) {
@@ -100,7 +100,7 @@ const App = () => {
           }
         })
       })
-      return addCookie("table", prevTable)
+      return setItemToLocalStorage("table", prevTable)
     }
     )
     setCheckedLines([])
@@ -128,7 +128,7 @@ const App = () => {
   const visibleFilms = searchFilms(table, temp)
 
   const handleDeleteLines = useCallback(() => {
-    setTable(addCookie("table", [...table].filter(f => !checkedLines.includes(f.id))))
+    setTable(setItemToLocalStorage("table", [...table].filter(f => !checkedLines.includes(f.id))))
     setCheckedLines([])
   }, [checkedLines, setTable, setCheckedLines, table])
 

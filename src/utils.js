@@ -40,3 +40,11 @@ export function deleteCookie(name) {
     expires: -1, path: '/'
   })
 }
+
+
+export const setItemToLocalStorage = (name, data) => {
+  window.localStorage.setItem(name, JSON.stringify(data))
+  return data
+}
+
+export const getItemToLocalStorage = name => JSON.parse(window.localStorage.getItem(name))
