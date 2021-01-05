@@ -7,6 +7,72 @@ import AppFooter from '../app-footer'
 
 import './app.scss'
 
+import {setItemToLocalStorage, getItemToLocalStorage} from '../../utils'
+
+
+let db = null
+
+
+
+const dbAddFilm = (films) =>  {
+  try{
+    for (let i = 0; i < films.length; i++) {
+      const tx = db.transaction('film-list', 'readwrite')
+      const filmsItem = tx.objectStore('film-list')
+      filmsItem.add(films[i])
+    }
+  } catch {
+      const tx = db.transaction('film-list', 'readwrite')
+      const filmsItem = tx.objectStore('film-list')
+      filmsItem.add(films[films.length - 1])
+  }
+  return films
+}
+
+const dbGetFilm = () => {
+  const tx = db.transaction('film-list', 'readwrite')
+  const filmsItem = tx.objectStore('film-list')
+  const request = filmsItem.openCursor()
+  const films = []
+  request.onsuccess = e => {
+    const cursor = e.target.result
+
+    if(!cursor) { 
+      return
+    } else {
+      alert(`${cursor.key} , ${cursor.value.name}`)
+      films.push(cursor.value)
+      cursor.continue()
+    }
+    
+  }
+  console.log(films)
+  return films
+}
+
+const filmDb = () => {
+
+  const request = indexedDB.open('films')
+
+  request.onupgradeneeded = e => {
+    db = e.target.result
+    if (!db.objectStoreNames.contains('film-list')) { 
+      db.createObjectStore('film-list', {keyPath: 'id'}); 
+    }
+  }
+
+  request.onsuccess = e => {
+    db = e.target.result
+  }
+
+  request.onerror = e => {
+    console.log('error')
+  }
+}
+
+filmDb()
+
+
 const defaultFilmList = [
   {id: 1, name: "Terminator", description: "I'll be back", genre: "action", rating: "10", isChecked: false},
   {
@@ -20,19 +86,38 @@ const defaultFilmList = [
   {id: 3, name: "American pie", description: "Don't eat the pie", genre: "comedy", rating: "10", isChecked: false},
 ]
 
+const getInitTable = () => {
+  // try {
+  //   const cookieParseData = getItemToLocalStorage("table")
+  //   if(getItemToLocalStorage("table") !== 'undefined' && cookieParseData){
+  //     return cookieParseData
+  //   }
+  // } catch (e) {
+  //   console.log("table has an error", JSON.stringify(e))
+  // }
+  try {
+    return dbGetFilm()
+  } catch (e) {
+    console.log(e.error)
+  }
+
+  return defaultFilmList
+}
+
 const App = () => {
-  const [table, setTable] = useState(defaultFilmList)
+  const [table, setTable] = useState(getInitTable())
   const [checkedLines, setCheckedLines] = useState([])
   const [temp, setTemp] = useState('')
   const [changeTempTableData, setChangeTempTableData] = useState([])
 
+
   const addFilm = newFilm => {
-    setTable([...table, {id: table.length + 1, ...newFilm, isChecked: false}])
+    setTable(dbAddFilm([...table, {id: table.length + 1, ...newFilm, isChecked: false}]))
   }
 
   const handleAscending = fieldName => {
     setTable(prevTable => {
-      return prevTable.sort((a, b) => {
+      return setItemToLocalStorage("table", prevTable.sort((a, b) => {
         if (a[fieldName] <= b[fieldName]) {
           return -1
         } else if (a[fieldName] > b[fieldName]) {
@@ -40,13 +125,13 @@ const App = () => {
         } else {
           return 0
         }
-      })
+      }))
     })
   }
 
   const handleDescending = fieldName => {
     setTable(prevTable => {
-      return prevTable.sort((a, b) => {
+      return setItemToLocalStorage("table", prevTable.sort((a, b) => {
         if (a[fieldName] < b[fieldName]) {
           return 1
         } else if (a[fieldName] > b[fieldName]) {
@@ -54,7 +139,7 @@ const App = () => {
         } else {
           return 0
         }
-      })
+      }))
     })
   }
 
@@ -85,8 +170,9 @@ const App = () => {
           }
         })
       })
-      return prevTable
-    })
+      return setItemToLocalStorage("table", prevTable)
+    }
+    )
     setCheckedLines([])
   }
 
@@ -112,7 +198,7 @@ const App = () => {
   const visibleFilms = searchFilms(table, temp)
 
   const handleDeleteLines = useCallback(() => {
-    setTable([...table].filter(f => !checkedLines.includes(f.id)))
+    setTable(setItemToLocalStorage("table", [...table].filter(f => !checkedLines.includes(f.id))))
     setCheckedLines([])
   }, [checkedLines, setTable, setCheckedLines, table])
 
