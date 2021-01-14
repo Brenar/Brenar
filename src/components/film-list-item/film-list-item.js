@@ -1,5 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux'
+
+import {handleCheckLine, checkedLines, currencyCheckSelector} from '../../models/currency'
 import './film-list-item.scss';
+
 
 const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTableData}) => {
 
@@ -34,6 +38,22 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTab
           })}
         </tr>
     )
+
+    // return (
+    //   <tr>
+    //     {Object.keys(filmData).map((item, key) => { 
+    //       if(item === 'isChecked'){
+    //         return <td key={key}><input type="checkbox" value={false} onClick={() => handleCheckLine(filmData.id)}/></td>
+    //       } else
+    //       return <td key={key}>{filmData[item]}</td>
+    //     }
+        
+    //     )}
+    //   </tr>
+    // )
 }
 
-export default FilmListItem;
+export default connect(state => ({
+  checkedLines: currencyCheckSelector(state)
+}),
+{handleCheckLine})(FilmListItem);

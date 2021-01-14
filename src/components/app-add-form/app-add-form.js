@@ -1,8 +1,14 @@
 import React, {useState, useCallback} from 'react';
+import {connect} from 'react-redux'
+
+import {
+    currencyListSelector,
+    addFilm
+} from '../../models/currency'
 
 import './app-add-form.scss'
 
-const AddForm = ({handleAddData}) => {
+const AddForm = ({currencyList, addFilm}) => {
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -14,12 +20,12 @@ const AddForm = ({handleAddData}) => {
         if(!name || name.length > 15 || !description || description.length > 25 || !genre || genre.length > 10 || !rating || rating > 10 || rating < 1 || isNaN(rating)) {
             return
         }
-        handleAddData({name, description, genre, rating})
+        addFilm({name, description, genre, rating}, currencyList)
         setName('')
         setDescription('')
         setGenre('')
         setRating('')
-    }, [name, description, genre, rating, setName, setDescription, setGenre, setRating, handleAddData]
+    }, [name, description, genre, rating, setName, setDescription, setGenre, setRating, addFilm]
   )
     console.log('render')
     return (
@@ -60,4 +66,7 @@ const AddForm = ({handleAddData}) => {
     )
 };
 
-export default AddForm;
+export default connect(state => ({
+    currencyList: currencyListSelector(state)
+}),
+{addFilm})(AddForm);

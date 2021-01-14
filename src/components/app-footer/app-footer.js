@@ -1,4 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux'
+
+import changeTemp from '../../models/currency'
 
 import './app-footer.scss';
 
@@ -17,4 +20,7 @@ const AppFooter = ({changeTemp, onRemoveLines, onChangeLine}) => {
     )
 };
 
-export default AppFooter;
+export default connect(state => ({
+    
+  }),
+  {changeTemp})(AppFooter);

@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
+import {connect} from 'react-redux'
 import FilmListItem from '../film-list-item';
+
 import './film-list.scss';
 
-const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
+import {
+    currencyListSelector,
+    handleDescending, 
+    handleAscending
+} from '../../models/currency'
+
+const FilmList = ({currencyList, handleAscending, handleDescending, ...rest}) => {
     const [currentSortField, setCurrentSortField] = useState(null)
     const [currentSortDirection, setCurrentSortDirection] = useState(false)
 
-    // TODO set here useCallback
+    //TODO set here useCallback
     const handleSortTable = (field) => () => {
         if(currentSortField === field){
             if(currentSortDirection){
@@ -35,7 +43,7 @@ const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tableData && tableData.length ? tableData.map( film =>
+                    {currencyList && currencyList.length ? currencyList.map( film =>
                           <FilmListItem key={film.id} filmData={film} {...rest}/>) : ''
                     }
                 </tbody>
@@ -44,4 +52,8 @@ const FilmList = ({tableData, handleAscending, handleDescending, ...rest}) => {
     )
 };
 
-export default FilmList;
+
+export default connect(state => ({
+    currencyList: currencyListSelector(state)
+}),
+{handleAscending, handleDescending})(FilmList);
