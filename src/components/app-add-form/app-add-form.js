@@ -1,10 +1,4 @@
 import React, {useState, useCallback} from 'react';
-import {connect} from 'react-redux'
-
-import {
-    currencyListSelector,
-    addFilm
-} from '../../models/currency'
 
 import './app-add-form.scss'
 
@@ -66,7 +60,4 @@ const AddForm = ({currencyList, addFilm}) => {
     )
 };
 
-export default connect(state => ({
-    currencyList: currencyListSelector(state)
-}),
-{addFilm})(AddForm);
+export default AddForm;
