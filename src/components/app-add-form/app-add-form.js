@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 
 import './app-add-form.scss'
 
-const AddForm = ({currencyList, addFilm}) => {
+const AddForm = ({filmList, addFilm}) => {
 
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
@@ -14,7 +14,7 @@ const AddForm = ({currencyList, addFilm}) => {
         if(!name || name.length > 15 || !description || description.length > 25 || !genre || genre.length > 10 || !rating || rating > 10 || rating < 1 || isNaN(rating)) {
             return
         }
-        addFilm({name, description, genre, rating}, currencyList)
+        addFilm({name, description, genre, rating}, filmList)
         setName('')
         setDescription('')
         setGenre('')

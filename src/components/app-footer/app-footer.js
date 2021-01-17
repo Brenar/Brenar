@@ -1,18 +1,18 @@
 import React from 'react';
 import {connect} from 'react-redux'
 
-import changeTemp from '../../models/currency'
+import {onRemoveLines, changeTemp, searchFilms} from '../../models/currency'
 
 import './app-footer.scss';
 
-const AppFooter = ({changeTemp, onRemoveLines, onChangeLine}) => {
+const AppFooter = ({changeTemp, searchFilms, onRemoveLines, onChangeLine}) => {
 
     return (
         <div className="footer">
             <button className="update" onClick={onChangeLine}>Редактировать</button>
             <input 
                 className="search"
-                onChange={(e) => changeTemp(e.target.value)}
+                onChange={(e) => searchFilms(e.target.value)}
                 >
             </input>
             <button className="delete" onClick={onRemoveLines}>Удалить</button>
@@ -23,4 +23,4 @@ const AppFooter = ({changeTemp, onRemoveLines, onChangeLine}) => {
 export default connect(state => ({
     
   }),
-  {changeTemp})(AppFooter);
+  {changeTemp, onRemoveLines, searchFilms})(AppFooter);

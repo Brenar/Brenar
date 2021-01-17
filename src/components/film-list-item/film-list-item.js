@@ -1,11 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux'
 
-import {handleCheckLine, checkedLines, currencyCheckSelector} from '../../models/currency'
+import {handleCheckLine, filmCheckSelector} from '../../models/currency'
 import './film-list-item.scss';
 
 
 const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTableData}) => {
+
 
     const handleChangeData = (value, lineId, fieldName) => {
         setChangeTempTableData(prevData => {
@@ -23,9 +24,12 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTab
         <tr>
           {Object.keys(filmData).map((item, key) => {
             if(item === 'isChecked'){
+              
               return <td key={key}><input type="checkbox" value={false} onClick={() => handleCheckLine(filmData.id)}/></td>
             } else {
+              console.log(checkedLines)
               if(checkedLines.includes(filmData.id) && item !== 'id'){
+
                 return <td key={key}>
                     <textarea onChange={event => handleChangeData(event.target.value, filmData.id, item)}>
                         {filmData[item]}
@@ -38,22 +42,9 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, setChangeTempTab
           })}
         </tr>
     )
-
-    // return (
-    //   <tr>
-    //     {Object.keys(filmData).map((item, key) => { 
-    //       if(item === 'isChecked'){
-    //         return <td key={key}><input type="checkbox" value={false} onClick={() => handleCheckLine(filmData.id)}/></td>
-    //       } else
-    //       return <td key={key}>{filmData[item]}</td>
-    //     }
-        
-    //     )}
-    //   </tr>
-    // )
 }
 
 export default connect(state => ({
-  checkedLines: currencyCheckSelector(state)
+  checkedLines: filmCheckSelector(state)
 }),
 {handleCheckLine})(FilmListItem);

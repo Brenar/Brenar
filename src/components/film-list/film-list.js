@@ -1,16 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux'
 import FilmListItem from '../film-list-item';
 
 import './film-list.scss';
 
 import {
-    currencyListSelector,
+    filmListSelector,
     handleDescending, 
-    handleAscending
+    handleAscending,
+    filmVisibleSelector,
+    searchFilms,
+    tempSelector
 } from '../../models/currency'
 
-const FilmList = ({currencyList, handleAscending, handleDescending, ...rest}) => {
+const FilmList = ({filmList, temp, visibleFilms, handleAscending, handleDescending, ...rest}) => {
     const [currentSortField, setCurrentSortField] = useState(null)
     const [currentSortDirection, setCurrentSortDirection] = useState(false)
 
@@ -29,6 +32,11 @@ const FilmList = ({currencyList, handleAscending, handleDescending, ...rest}) =>
         }
     }
 
+    useEffect(() => {
+        searchFilms()
+        
+    }, [])
+
     return (
         <div className="wrapper">
             <table className="table">
@@ -43,7 +51,7 @@ const FilmList = ({currencyList, handleAscending, handleDescending, ...rest}) =>
                     </tr>
                 </thead>
                 <tbody>
-                    {currencyList && currencyList.length ? currencyList.map( film =>
+                    {visibleFilms && visibleFilms.length ? visibleFilms.map( film =>
                           <FilmListItem key={film.id} filmData={film} {...rest}/>) : ''
                     }
                 </tbody>
@@ -54,6 +62,8 @@ const FilmList = ({currencyList, handleAscending, handleDescending, ...rest}) =>
 
 
 export default connect(state => ({
-    currencyList: currencyListSelector(state)
+    filmList: filmListSelector(state), 
+    visibleFilms: filmVisibleSelector(state),
+    temp: tempSelector(state)
 }),
-{handleAscending, handleDescending})(FilmList);
+{searchFilms, handleAscending, handleDescending})(FilmList);
