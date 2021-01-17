@@ -5,7 +5,7 @@ const HANLDE_ASCENDING = 'HANLDE_ASCENDING'
 const HANDLE_DISCENDING = 'HANDLE_DISCENDING'
 const HANDLE_DELETE_FILM = 'DELETE_FILM'
 const HANDLE_CHECK_LINE = 'HANDLE_CHECK_LINE'
-const HANDLE_CHANGE_LINE = 'HANDLE_CHECK_LINE'
+const HANDLE_CHANGE_LINE = 'HANDLE_CHANGE_LINE'
 const HANDLE_CHANGE_TEMP = 'HANDLE_CHANGE_TEMP'
 const HANDLE_VISIBLE_FILMS = 'HANDLE_VISIBLE_FILMS'
 
@@ -140,7 +140,6 @@ const hello = () => {
         prevData = prevData.filter(f => f !== lineId)
         changeData = changeData.filter(f => f.id !== lineId)
       }
-    console.log(getState().changeTempTableData)
     dispatch({
         type: HANDLE_CHANGE_LINE,
         payload: {checkedLines: prevData, changeTempTableData: changeData}
