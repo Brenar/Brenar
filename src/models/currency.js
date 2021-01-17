@@ -35,9 +35,6 @@ export const ReducerRecord = {
     visibleFilms: []
 }
 
-    
-
-
 
 export default function reducer(state = ReducerRecord, action) {
     const {type, payload} = action
