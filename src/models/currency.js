@@ -1,5 +1,8 @@
 import {createSelector} from 'reselect'
 
+
+export const moduleName = 'filmTable'
+
 const ADD_FILM = 'ADD_FILM'
 const HANLDE_ASCENDING = 'HANLDE_ASCENDING'
 const HANDLE_DISCENDING = 'HANDLE_DISCENDING'
@@ -34,7 +37,7 @@ export const ReducerRecord = {
     checkedLines: [],
     changeTempTableData: [],
     temp: '',
-    visibleFilms: []
+    visibleFilms: null
 }
 
 
@@ -80,24 +83,21 @@ export default function reducer(state = ReducerRecord, action) {
     }
 }
 
-//export const stateSelector = state => state[moduleName]
-export const filmListSelector = state => state.filmList
-export const filmCheckSelector = state => state.checkedLines
-export const filmVisibleSelector = state => state.visibleFilms
-export const tempSelector = state => state.temp
+export const stateSelector = state => state[moduleName]
+export const filmListSelector = createSelector(stateSelector, state => state.filmList)
+export const filmCheckSelector = createSelector(stateSelector, state => state.checkedLines)
+export const filmVisibleSelector = createSelector(stateSelector, state => state.visibleFilms)
+export const tempSelector = createSelector(stateSelector, state => state.temp)
 
 export const addFilm = (film, state) => ({
-    
-        type: ADD_FILM,
-        payload: [...state, {id: state.length + 1, ...film, isChecked: false}]
-    
+    type: ADD_FILM,
+    payload: [...state, {id: state.length + 1, ...film, isChecked: false}]
 })
-
 
 export const handleAscending = fieldName => (dispatch, getState) => {
     dispatch({
         type: HANLDE_ASCENDING,
-        payload: getState().filmList.sort((a, b) => {
+        payload: getState()[moduleName].filmList.sort((a, b) => {
             if (a[fieldName] <= b[fieldName]) {
               return -1
             } else if (a[fieldName] > b[fieldName]) {
@@ -112,7 +112,7 @@ export const handleAscending = fieldName => (dispatch, getState) => {
 export const handleDescending = fieldName => (dispatch, getState) => {
     dispatch({
         type: HANDLE_DISCENDING,
-        payload: getState().filmList.sort((a, b) => {
+        payload: getState()[moduleName].filmList.sort((a, b) => {
             if (a[fieldName] < b[fieldName]) {
                 return 1
             } else if (a[fieldName] > b[fieldName]) {
@@ -125,12 +125,14 @@ export const handleDescending = fieldName => (dispatch, getState) => {
 }
 
  export const handleCheckLine = lineId => (dispatch, getState) => {
-    const currentIndex = getState().checkedLines.indexOf(lineId)
-    let prevData = getState().checkedLines
-    let changeData = getState().changeTempTableData
+    const moduleData = getState()[moduleName]
+
+    const currentIndex = moduleData.checkedLines.indexOf(lineId)
+    let prevData = moduleData.checkedLines
+    let changeData = moduleData.changeTempTableData
     if (currentIndex === -1) {
         prevData = [...prevData, lineId]
-        let filmData = [...getState().filmList]
+        let filmData = [...moduleData.filmList]
         let film = filmData.filter(f => f.id === lineId)
         let film1 = film[0]
         changeData = [...changeData, film1]
@@ -147,8 +149,9 @@ export const handleDescending = fieldName => (dispatch, getState) => {
 
 
   export const onRemoveLines = () => (dispatch, getState) => {
-    let changeData = getState().checkedLines
-    let filmData = getState().filmList
+    const moduleData = getState()[moduleName]
+    let changeData = moduleData.checkedLines
+    let filmData = moduleData.filmList
     filmData = filmData.filter(f => !changeData.includes(f.id))
 
     dispatch({
@@ -159,8 +162,8 @@ export const handleDescending = fieldName => (dispatch, getState) => {
 
 
 export const searchFilms = (temp) => (dispatch, getState) => {
-    
-    const table = getState().filmList
+    const moduleData = getState()[moduleName]
+    const table = moduleData.filmList
     if (temp.length === 0) {
         
     }
@@ -177,7 +180,7 @@ export const searchFilms = (temp) => (dispatch, getState) => {
 }
 
 export const handleChangeData = (value, lineId, fieldName) => (dispatch, getState) => {
-    const newData = getState().changeTempTableData
+    const newData = getState()[moduleName].changeTempTableData
     newData.map((line, key) => {
         if(line.id === lineId) {
             newData[key][fieldName] = value
@@ -191,8 +194,8 @@ export const handleChangeData = (value, lineId, fieldName) => (dispatch, getStat
 }
 
 export const handleChangeLine = () => (dispatch, getState) => {
-    const lines = getState().changeTempTableData
-    const filmData = getState().filmList
+    const lines = getState()[moduleName].changeTempTableData
+    const filmData = getState()[moduleName].filmList
     
     filmData.map((item, key) => {
 

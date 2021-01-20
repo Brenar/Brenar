@@ -11,11 +11,12 @@ import {
     filmVisibleSelector,
     searchFilms,
     tempSelector
-} from '../../models/currency'
+} from '../../../../models/currency'
 
 const FilmList = ({filmList, temp, visibleFilms, handleAscending, handleDescending, ...rest}) => {
     const [currentSortField, setCurrentSortField] = useState(null)
     const [currentSortDirection, setCurrentSortDirection] = useState(false)
+    const list = visibleFilms && visibleFilms.length ? visibleFilms : filmList
 
     //TODO set here useCallback
     const handleSortTable = (field) => () => {
@@ -32,10 +33,9 @@ const FilmList = ({filmList, temp, visibleFilms, handleAscending, handleDescendi
         }
     }
 
-    useEffect(() => {
-        searchFilms()
-        
-    }, [])
+    // useEffect(() => {
+    //     searchFilms()
+    // }, [])
 
     return (
         <div className="wrapper">
@@ -50,7 +50,7 @@ const FilmList = ({filmList, temp, visibleFilms, handleAscending, handleDescendi
                         <th>check</th>
                     </tr>
                 </thead>
-                <tbody>{visibleFilms && visibleFilms.length ? visibleFilms.map( film => 
+                <tbody>{list && list.length ? list.map( film =>
                     <FilmListItem key={film.id} filmData={film} {...rest}/>) : null}
                 </tbody>
             </table>

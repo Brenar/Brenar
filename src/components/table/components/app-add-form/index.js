@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import {
   filmListSelector,
   addFilm
-} from '../../models/currency'
+} from '../../../../models/currency'
 
 import AddForm from './app-add-form';
 

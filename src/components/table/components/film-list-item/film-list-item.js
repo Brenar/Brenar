@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-
-import {handleCheckLine, filmCheckSelector, handleChangeData} from '../../models/currency'
+import {handleCheckLine, filmCheckSelector, handleChangeData} from '../../../../models/currency'
 import './film-list-item.scss';
 
 
@@ -27,7 +26,6 @@ const FilmListItem = ({filmData, handleCheckLine, checkedLines, handleChangeData
             }
           })}
         </tr>
-
     )
 }
 

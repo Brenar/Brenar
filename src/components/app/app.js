@@ -1,11 +1,11 @@
 import React from "react"
-import AppHeader from '../app-header'
-import AddForm from '../app-add-form'
-import FilmList from '../film-list'
-import AppFooter from '../app-footer'
+import AddedForm from '../AddedForm'
+import Table from '../table'
+
 import {
   Switch,
-  Route
+  Route,
+  Link
 } from "react-router-dom";
 
 import Tab from '../Tabs'
@@ -16,23 +16,17 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>
-          <AppHeader/>
-          <AddForm/>
-          <FilmList/>
-          <AppFooter/>
-          {/*<AppHeader/>*/}
-          {/* <Tab routes={[
-            {route: 'table', component: FilmList},
-            {route: 'form', component: AddForm},
-            {route: 'footer', component: AppFooter}]
-          }/> */}
-          {/*<Switch>*/}
-          {/*  <Route path="/table" render={() => <>*/}
-          {/*    <FilmList/>*/}
-          {/*    <AppFooter/>*/}
-          {/*  </>}/>*/}
-          {/*  <Route path="/form" render={() => <AddForm/>}/>*/}
-          {/*</Switch>*/}
+          {/*<Tab routes={[*/}
+          {/*  {route: 'table', component: FilmList},*/}
+          {/*  {route: 'form', component: AddForm},*/}
+          {/*  {route: 'footer', component: AppFooter}]*/}
+          {/*}/> */}
+          <Link to={'/table'}>To filmTable</Link>
+          <Link to={'/form'}>To Form</Link>
+          <Switch>
+            <Route path="/table" component={Table}/>
+            <Route path="/form" component={AddedForm}/>
+          </Switch>
         </div>
         <div>
         </div>

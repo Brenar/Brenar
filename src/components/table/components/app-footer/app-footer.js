@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {connect} from 'react-redux'
 
-import {onRemoveLines, searchFilms, filmListSelector, handleChangeLine} from '../../models/currency'
+import {onRemoveLines, searchFilms, filmListSelector, handleChangeLine} from '../../../../models/currency'
 
 import './app-footer.scss';
 
