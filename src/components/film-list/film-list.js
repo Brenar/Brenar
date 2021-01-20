@@ -50,12 +50,10 @@ const FilmList = ({filmList, temp, visibleFilms, handleAscending, handleDescendi
                         <th>check</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {visibleFilms && visibleFilms.length ? visibleFilms.map( film =>
-                          <FilmListItem key={film.id} filmData={film} {...rest}/>) : ''
-                    }
+                <tbody>{visibleFilms && visibleFilms.length ? visibleFilms.map( film => 
+                    <FilmListItem key={film.id} filmData={film} {...rest}/>) : null}
                 </tbody>
-                </table>
+            </table>
         </div>
     )
 };

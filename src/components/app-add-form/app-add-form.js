@@ -19,7 +19,7 @@ const AddForm = ({filmList, addFilm}) => {
         setDescription('')
         setGenre('')
         setRating('')
-    }, [name, description, genre, rating, setName, setDescription, setGenre, setRating, addFilm]
+    }, [name, description, genre, rating, setName, setDescription, setGenre, setRating, addFilm, filmList]
   )
     console.log('render')
     return (

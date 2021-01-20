@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {connect} from 'react-redux'
 
-import {onRemoveLines, changeTemp, searchFilms} from '../../models/currency'
+import {onRemoveLines, searchFilms, filmListSelector, handleChangeLine} from '../../models/currency'
 
 import './app-footer.scss';
 
-const AppFooter = ({changeTemp, searchFilms, onRemoveLines, onChangeLine}) => {
+const AppFooter = ({filmList, searchFilms, onRemoveLines, handleChangeLine}) => {
+
+    useEffect(() => {
+        searchFilms('')
+    }, [filmList, searchFilms])
 
     return (
         <div className="footer">
-            <button className="update" onClick={onChangeLine}>Редактировать</button>
+            <button className="update" onClick={handleChangeLine}>Редактировать</button>
             <input 
                 className="search"
                 onChange={(e) => searchFilms(e.target.value)}
@@ -21,6 +25,6 @@ const AppFooter = ({changeTemp, searchFilms, onRemoveLines, onChangeLine}) => {
 };
 
 export default connect(state => ({
-    
+    filmList: filmListSelector(state)
   }),
-  {changeTemp, onRemoveLines, searchFilms})(AppFooter);
+  {onRemoveLines, searchFilms, handleChangeLine})(AppFooter);

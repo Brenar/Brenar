@@ -16,12 +16,16 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>
+          <AppHeader/>
+          <AddForm/>
+          <FilmList/>
+          <AppFooter/>
           {/*<AppHeader/>*/}
-          <Tab routes={[
+          {/* <Tab routes={[
             {route: 'table', component: FilmList},
             {route: 'form', component: AddForm},
             {route: 'footer', component: AppFooter}]
-          }/>
+          }/> */}
           {/*<Switch>*/}
           {/*  <Route path="/table" render={() => <>*/}
           {/*    <FilmList/>*/}

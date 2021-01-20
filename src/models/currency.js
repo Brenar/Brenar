@@ -8,6 +8,8 @@ const HANDLE_CHECK_LINE = 'HANDLE_CHECK_LINE'
 const HANDLE_CHANGE_LINE = 'HANDLE_CHANGE_LINE'
 const HANDLE_CHANGE_TEMP = 'HANDLE_CHANGE_TEMP'
 const HANDLE_VISIBLE_FILMS = 'HANDLE_VISIBLE_FILMS'
+const HANDLE_SAVE_CHANGES = 'HANDLE_SAVE_CHANGES'
+const HANDLE_CHANGE_CHANGE_LINE = 'HANDLE_CHANGE_CHANGE_LINE'
 
 
 export const ReducerRecord = {
@@ -44,13 +46,9 @@ export default function reducer(state = ReducerRecord, action) {
             return Object.assign({}, state, {
                 filmList: payload
             })
-        case HANLDE_ASCENDING:
+        case HANDLE_CHANGE_CHANGE_LINE:
             return Object.assign({}, state, {
-                filmList: [...payload]
-            })
-        case HANDLE_DISCENDING:
-            return Object.assign({}, state, {
-                filmList: payload
+                changeTempTableData: payload
             })
         case HANDLE_CHECK_LINE:
             return Object.assign({}, state, {
@@ -72,6 +70,11 @@ export default function reducer(state = ReducerRecord, action) {
             return Object.assign({}, state, {
                 visibleFilms: payload
             })
+        case HANDLE_SAVE_CHANGES:
+            return Object.assign({}, 
+                state, 
+                {filmList: payload.filmList},
+                {checkedLines: payload.checkedLines})
         default:
             return state
     }
@@ -121,18 +124,17 @@ export const handleDescending = fieldName => (dispatch, getState) => {
     })
 }
 
-const hello = () => {
-    console.log('hello')
-}
-
  export const handleCheckLine = lineId => (dispatch, getState) => {
     const currentIndex = getState().checkedLines.indexOf(lineId)
     let prevData = getState().checkedLines
     let changeData = getState().changeTempTableData
     if (currentIndex === -1) {
         prevData = [...prevData, lineId]
-        let filmData = getState().filmList
-        changeData = [...changeData, filmData.filter(f => f.id === lineId)]
+        let filmData = [...getState().filmList]
+        let film = filmData.filter(f => f.id === lineId)
+        let film1 = film[0]
+        changeData = [...changeData, film1]
+        console.log(film1)
       } else {
         prevData = prevData.filter(f => f !== lineId)
         changeData = changeData.filter(f => f.id !== lineId)
@@ -143,24 +145,6 @@ const hello = () => {
     })
   }
 
-//   const deleteChangeData = (lineId) => (dispatch, getState) => {
-//     let changeData = getState().changeTempTableData
-//     changeData = changeData.filter(f => f.id !== lineId)
-//     dispatch({
-//         type: HANDLE_CHANGE_LINE,
-//         payload: changeData
-//     })
-//   }
-
-//   const addChangeData = (lineId) => (dispatch, getState) => {
-//     let changeData = getState().changeTempTableData
-//     let filmData = getState().filmList
-//     changeData = [...changeData, filmData.filter(f => f.id === lineId)]
-//     dispatch({
-//         type: HANDLE_CHANGE_LINE,
-//         payload: changeData
-//     })
-//   }
 
   export const onRemoveLines = () => (dispatch, getState) => {
     let changeData = getState().checkedLines
@@ -174,14 +158,6 @@ const hello = () => {
   }
 
 
-  export const changeTemp = temps => (dispatch, getState) => {
-      console.log(temps)
-    dispatch({
-        type: HANDLE_CHANGE_TEMP,
-        payload: temps
-    })
-}
-
 export const searchFilms = (temp) => (dispatch, getState) => {
     
     const table = getState().filmList
@@ -189,10 +165,10 @@ export const searchFilms = (temp) => (dispatch, getState) => {
         
     }
 
-    const newTable = table.filter(film => film.name.toLowerCase().includes(temp.toLowerCase()) 
-        // film.description.toLowerCase().includes(temp.toLowerCase()) ||
-        // film.genre.toLowerCase().includes(temp.toLowerCase()) ||
-        // film.rating.toLowerCase().includes(temp.toLowerCase())
+    const newTable = table.filter(film => film.name.toLowerCase().includes(temp.toLowerCase()) ||
+        film.description.toLowerCase().includes(temp.toLowerCase()) ||
+        film.genre.toLowerCase().includes(temp.toLowerCase()) ||
+        film.rating.toLowerCase().includes(temp.toLowerCase())
     )
     dispatch({
         type: HANDLE_VISIBLE_FILMS,
@@ -200,4 +176,40 @@ export const searchFilms = (temp) => (dispatch, getState) => {
     })
 }
 
-//export const visibleFilms = searchFilms()
+export const handleChangeData = (value, lineId, fieldName) => (dispatch, getState) => {
+    const newData = getState().changeTempTableData
+    newData.map((line, key) => {
+        if(line.id === lineId) {
+            newData[key][fieldName] = value
+        }
+        return line
+    })
+    dispatch({
+        type: HANDLE_CHANGE_CHANGE_LINE,
+        payload: newData
+    })
+}
+
+export const handleChangeLine = () => (dispatch, getState) => {
+    const lines = getState().changeTempTableData
+    const filmData = getState().filmList
+    
+    filmData.map((item, key) => {
+
+        return lines.map((line) => {
+          if (filmData[key].id === line.id) {
+            filmData[key].name = line.name
+            filmData[key].description = line.description
+            filmData[key].genre = line.genre
+            filmData[key].rating = line.rating
+            filmData[key].isChecked = false
+          }
+          return line
+        })
+    }
+    )
+    dispatch({
+        type: HANDLE_SAVE_CHANGES,
+        payload: {filmList: filmData, checkedLines: []}
+    })
+  }
