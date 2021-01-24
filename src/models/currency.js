@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect'
-
+import {setItemToLocalStorage, getItemToLocalStorage} from '../utils'
 
 export const moduleName = 'filmTable'
 
@@ -14,26 +14,28 @@ const HANDLE_VISIBLE_FILMS = 'HANDLE_VISIBLE_FILMS'
 const HANDLE_SAVE_CHANGES = 'HANDLE_SAVE_CHANGES'
 const HANDLE_CHANGE_CHANGE_LINE = 'HANDLE_CHANGE_CHANGE_LINE'
 
+let defaultFilmList = [
+    {
+      id: 1,
+      name: "Terminator",
+      description: "I'll be back",
+      genre: "action",
+      rating: "10",
+      isChecked: false
+    },
+    {
+      id: 2,
+      name: "Lord of the ring",
+      description: "Frodo give back the ring",
+      genre: "adventure",
+      rating: "9",
+      isChecked: false
+    }
+  ]
+
 
 export const ReducerRecord = {
-    filmList: [
-      {
-        id: 1,
-        name: "Terminator",
-        description: "I'll be back",
-        genre: "action",
-        rating: "10",
-        isChecked: false
-      },
-      {
-        id: 2,
-        name: "Lord of the ring",
-        description: "Frodo give back the ring",
-        genre: "adventure",
-        rating: "9",
-        isChecked: false
-      }
-    ],
+    filmList: getItemToLocalStorage('filmList') || defaultFilmList,
     checkedLines: [],
     changeTempTableData: [],
     temp: '',
@@ -73,6 +75,14 @@ export default function reducer(state = ReducerRecord, action) {
             return Object.assign({}, state, {
                 visibleFilms: payload
             })
+        case HANLDE_ASCENDING:
+            return Object.assign({}, state, {
+                filmList: payload.filmData
+            }, {visibleFilms: payload.visibleData})
+        case HANDLE_DISCENDING:
+            return Object.assign({}, state, {
+                filmList: payload.filmData
+            }, {visibleFilms: payload.visibleData})
         case HANDLE_SAVE_CHANGES:
             return Object.assign({}, 
                 state, 
@@ -91,37 +101,65 @@ export const tempSelector = createSelector(stateSelector, state => state.temp)
 
 export const addFilm = (film, state) => ({
     type: ADD_FILM,
-    payload: [...state, {id: state.length + 1, ...film, isChecked: false}]
+    payload: setItemToLocalStorage('filmList', [...state, {id: state.length + 1, ...film, isChecked: false}])
 })
 
 export const handleAscending = fieldName => (dispatch, getState) => {
+
+    const changeData = setItemToLocalStorage('filmList', getState()[moduleName].filmList.sort((a, b) => {
+        if (a[fieldName] <= b[fieldName]) {
+            return -1
+        } else if (a[fieldName] > b[fieldName]) {
+            return 1
+        } else {
+            return 0
+        }
+        }))
+
+    const changeVisible = getState()[moduleName].visibleFilms.sort((a, b) => {
+        if (a[fieldName] <= b[fieldName]) {
+            return -1
+        } else if (a[fieldName] > b[fieldName]) {
+            return 1
+        } else {
+            return 0
+        }
+        })
+
+
     dispatch({
         type: HANLDE_ASCENDING,
-        payload: getState()[moduleName].filmList.sort((a, b) => {
-            if (a[fieldName] <= b[fieldName]) {
-              return -1
-            } else if (a[fieldName] > b[fieldName]) {
-              return 1
-            } else {
-              return 0
-            }
-          })
+        payload: {filmData: changeData, visibleData: changeVisible}
     })
   }
 
 export const handleDescending = fieldName => (dispatch, getState) => {
+
+    const changeData = setItemToLocalStorage('filmList', getState()[moduleName].filmList.sort((a, b) => {
+        if (a[fieldName] < b[fieldName]) {
+            return 1
+        } else if (a[fieldName] > b[fieldName]) {
+            return -1
+        } else {
+            return 0
+        }
+        }))
+
+    const changeVisible = getState()[moduleName].visibleFilms.sort((a, b) => {
+        if (a[fieldName] < b[fieldName]) {
+            return 1
+        } else if (a[fieldName] > b[fieldName]) {
+            return -1
+        } else {
+            return 0
+        }
+        })
+
     dispatch({
         type: HANDLE_DISCENDING,
-        payload: getState()[moduleName].filmList.sort((a, b) => {
-            if (a[fieldName] < b[fieldName]) {
-                return 1
-            } else if (a[fieldName] > b[fieldName]) {
-                return -1
-            } else {
-                return 0
-            }
-            })
+        payload: {filmData: changeData, visibleData: changeVisible}
     })
+    
 }
 
  export const handleCheckLine = lineId => (dispatch, getState) => {
@@ -156,7 +194,7 @@ export const handleDescending = fieldName => (dispatch, getState) => {
 
     dispatch({
         type: HANDLE_DELETE_FILM,
-        payload: filmData
+        payload: setItemToLocalStorage('filmList', filmData) 
     })
   }
 
@@ -198,7 +236,6 @@ export const handleChangeLine = () => (dispatch, getState) => {
     const filmData = getState()[moduleName].filmList
     
     filmData.map((item, key) => {
-
         return lines.map((line) => {
           if (filmData[key].id === line.id) {
             filmData[key].name = line.name
@@ -213,6 +250,6 @@ export const handleChangeLine = () => (dispatch, getState) => {
     )
     dispatch({
         type: HANDLE_SAVE_CHANGES,
-        payload: {filmList: filmData, checkedLines: []}
+        payload: {filmList: setItemToLocalStorage('filmList', filmData), checkedLines: []}
     })
   }
