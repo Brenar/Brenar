@@ -1,7 +1,7 @@
 import React from "react"
 import { Field, reduxForm } from 'redux-form'
 import { connect } from 'react-redux'
-import {required, maxLength10, onlyNum} from './validate'
+import validate, {required, maxLength10, onlyNum} from './validate'
 
 import {
   filmListSelector,
@@ -20,33 +20,37 @@ const renderField = ({ input, label, type, meta: { touched, error, warning } }) 
 )
 
 let AddedForm = (props) => {
-  const {filmList, addFilm, formData} = props
-  return <form onSubmit={(event) => {
-    event.preventDefault()
+  const {filmList, addFilm, formData, reset, pristine, submitting, handleSubmit} = props
+
+  const submit = () => {
     addFilm(formData.values, filmList)
-  }}>
+  }
+
+  return <form onSubmit={handleSubmit(submit)}>
     <div>
       <label htmlFor="name">Name</label>
-      <Field name="name" component={renderField} type="text" validate={[ required, maxLength10 ]}/>
+      <Field name="name" component={renderField} type="text"/>
     </div>
     <div>
       <label htmlFor="desc">Desc</label>
-      <Field name="desc" component={renderField} type="text" validate={[ required, maxLength10 ]}/>
+      <Field name="desc" component={renderField} type="text" />
     </div>
     <div>
       <label htmlFor="genre">Genre</label>
-      <Field name="genre" component={renderField} type="text" validate={[ required, maxLength10 ]}/>
+      <Field name="genre" component={renderField} type="text" />
     </div>
     <div>
       <label htmlFor="rating">Rating</label>
-      <Field name="rating" component={renderField} type="text" validate={[ required, maxLength10, onlyNum ]}/>
+      <Field name="rating" component={renderField} type="text" />
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit" disabled={submitting}>Submit</button>
+    <button type="button" disabled={pristine || submitting} onClick={reset}>Reset</button>
   </form>
 }
 
 AddedForm = reduxForm({
   form: 'example',
+  validate
 })(AddedForm)
 
 AddedForm = connect(
